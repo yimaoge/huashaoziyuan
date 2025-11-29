@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>花少音频资源网</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+        body
+
+
+ {
+            background-color: #0a0a0a;
+            color: #e5e7eb;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 星空背景样式 */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* 流星样式 */
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+            border-radius: 50%;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+            transform: rotate(45deg);
+            animation: shooting var(--duration) linear infinite;
+            opacity: 0;
+            top: var(--top);
+            left: var(--left);
+        }
+
+        @keyframes shooting {
+            0% {
+                transform: translateX(0) translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--distance)) translateY(var(--distance)) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        }
+
+        .card-gradient {
+            background: linear-gradient(145deg, #1e1e1e 0%, #171717 100%);
+        }
+
+        .card-gradient-purple {
+            background: linear-gradient(145deg, #4c1d95 0%, #3b0764 100%);
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .glow-effect:hover {
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+        }
+
+        .search-glow:focus {
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
+        }
+
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5b21b6;
+        }
+
+        /* Back to top button */
+        #back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(145deg, #6d28d9 0%, #4c1d95 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(109, 40, 217, 0.4);
+        }
+
+        #back-to-top:active {
+            transform: translateY(1px);
+        }
+
+        /* Neon text effect */
+        .neon-text {
+            text-shadow: 0 0 5px rgba(167, 139, 250, 0.5),
+                         0 0 10px rgba(167, 139, 250, 0.3);
+        }
+
+        /* Grid item animation */
+        .grid-item {
+            transform: perspective(500px) translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .grid-item:hover {
+            transform: perspective(500px) translateZ(20px);
+        }
+
+        /* Section divider */
+        .divider {
+            position: relative;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(109, 40, 217, 0.5) 50%, transparent 100%);
+            margin: 2rem 0;
+        }
+
+        /* Input placeholder styling */
+        ::placeholder {
+            color: #9ca3af;
+            opacity: 1;
+        }
+
+        /* Ripple effect for buttons */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .ripple:active:after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+
+        /* Tag styles */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .tag-calculator {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .tag-health {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+        }
+
+        .tag-productivity {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .tag-finance {
+            background-color: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+        }
+
+        .tag-media {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+        }
+
+        .tag-utility {
+            background-color: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+        }
+
+        .tag-developer {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+        }
+
+        .tag-time {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .tag-text {
+            background-color: rgba(20, 184, 166, 0.1);
+            color: #14b8a6;
+        }
+
+        /* Active filter button */
+        .filter-btn.active {
+            background-color: #6d28d9;
+            color: white;
+        }
+
+        /* Tool card content */
+        .tool-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+   
+        /* 彩色渐变DeepSeek按钮 */
+        .deepseek-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, 
+                #FF512F 0%, 
+                #DD2476 25%, 
+                #8A2BE2 50%, 
+                #4B6CB7 75%, 
+                #1FA2FF 100%);
+            background-size: 300% 300%;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-decoration: none;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: gradientBG 8s ease infinite, pulse 2s ease infinite;
+        }
+
+        .deepseek-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            animation: gradientBG 4s ease infinite, pulse 1s ease infinite;
+        }
+
+        .deepseek-btn i {
+            font-size: 1.2rem;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-3px) scale(1.05);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* B站横幅样式 */
+        .bilibili-banner {
+            background: linear-gradient(145deg, #1e1e1e 0%, #171717 100%);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin: 0 auto 24px auto;
+            max-width: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .bilibili-text {
+            font-size: 1.1rem;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+        }
+
+        .bilibili-btn {
+            background: linear-gradient(145deg, #FFD700 0%, #FFA500 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bilibili-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .bilibili-btn:active {
+            transform: translateY(0);
+        }
+
+        .bilibili-icon {
+            color: #000;
+            font-size: 1.1rem;
+        }
+
+     
+        .beian-container {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .beian-link {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .beian-link:hover {
+            color: #d1d5db;
+        }
+
+        .beian-link i {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+<!-- 星空背景 -->
+<div class="stars-container" id="stars-container"></div>
+<!-- 彩色渐变DeepSeek按钮 -->
+<a class="deepseek-btn ripple" href="http://kr-se-cncn-1.ofalias.net:59459/" rel="nofollow noopener noreferrer" target="_blank">
+<i class="fa-solid fa-rocket"></i>
+        去花少音频资源网!
+    </a>
+
+<div class="min-h-screen w-full py-12 px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="text-center mb-8">
+<h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600 neon-text">
+                    DailyFunctions
+                </h1>
+<body>
+<h1>花少音频资源网</h1>
+
+<h1>Kx3538驱动<br></h1>
+<h1>Kx3552驱动<br></h1>
+<h1>Kx3553驱动<br></h1>
+<h1>Kx7.1效果<br></h1>
+<h1>Kx5.1效果<br></h1>
+<h1>VST插件<br></h1>
+<h1>直播音效<br></h1>
+<h1>电音助手<br></h1>
+<h1>占用电脑很小直播机架</div></h1>
+<body>
+<br/>
+<a class="beian-link" href="https://beian.mps.gov.cn/#/query/webSearch?code=32031102020208" rel="noreferrer" target="_blank">
+
+</div>
+</div>
+</div>
+
+<script>
+        // 创建星空背景
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starsCount = 200;
+            const shootingStarsCount = 3;
+            
+            // 创建静态星星
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机大小 (1-3px)
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机闪烁时间 (3-8秒)
+                const duration = Math.random() * 5 + 3;
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                // 随机透明度 (0.3-0.9)
+                star.style.opacity = Math.random() * 0.6 + 0.3;
+                
+                container.appendChild(star);
+            }
+            
+            // 创建流星
+            for (let i = 0; i < shootingStarsCount; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                // 随机位置
+                shootingStar.style.top = `${Math.random() * 30}%`;
+                shootingStar.style.left = `${Math.random() * 100}%`;
+                
+                // 随机动画时间 (3-8秒)
+                const duration = Math.random() * 5 + 3;
+                shootingStar.style.setProperty('--duration', `${duration}s`);
+                
+                // 随机距离 (100-300px)
+                const distance = Math.random() * 200 + 100;
+                shootingStar.style.setProperty('--distance', `${distance}px`);
+                
+                // 随机延迟 (0-15秒)
+                shootingStar.style.animationDelay = `${Math.random() * 15}s`;
+                
+                container.appendChild(shootingStar);
+            }
+        }
+
+        // 页面加载完成后创建星空
+        window.addEventListener('load', createStars);
+
+        const searchBox = document.getElementById('search-box');
+        const links = document.querySelectorAll('main a');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // 初始激活"全部工具"按钮
+        document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+
+        function filterLinks() {
+            const searchTerm = searchBox.value.trim().toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+
+            links.forEach(link => {
+                const linkText = link.textContent.toLowerCase();
+                const linkTags = link.dataset.tags || '';
+                
+                // 同时满足搜索条件和分类过滤
+                const matchesSearch = searchTerm === '' || linkText.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || linkTags.includes(activeFilter);
+                
+                const shouldShow = matchesSearch && matchesFilter;
+                
+                if (shouldShow) {
+                    link.style.display = "flex";
+                    setTimeout(() => {
+                        link.style.opacity = "1";
+                        link.style.transform = "translateY(0)";
+                    }, 50);
+                } else {
+                    link.style.opacity = "0";
+                    link.style.transform = "translateY(20px)";
+                    setTimeout(() => {
+                        link.style.display = "none";
+                    }, 300);
+                }
+            });
+        }
+
+        // 搜索框事件
+        searchBox.addEventListener('input', filterLinks);
+
+        // 分类按钮事件
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterLinks();
+            });
+        });
+
+        // Initialize with all links visible
+        filterLinks();
+
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = "flex";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add ripple effect to all buttons
+        const rippleButtons = document.querySelectorAll('.ripple');
+        rippleButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = e.target.closest('a');
+                if (target) {
+                    setTimeout(() => {
+                        window.location.href = target.href;
+                    }, 300);
+                }
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>
