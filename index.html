@@ -1,617 +1,907 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>花少音频资源网</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
-<style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花少音频资源 </title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
-        body
-
-
- {
-            background-color: #0a0a0a;
-            color: #e5e7eb;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* 星空背景样式 */
-        .stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-
-        /* 流星样式 */
-        .shooting-star {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
-            border-radius: 50%;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
-            transform: rotate(45deg);
-            animation: shooting var(--duration) linear infinite;
-            opacity: 0;
-            top: var(--top);
-            left: var(--left);
-        }
-
-        @keyframes shooting {
-            0% {
-                transform: translateX(0) translateY(0) rotate(45deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            70% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(var(--distance)) translateY(var(--distance)) rotate(45deg);
-                opacity: 0;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#F472B6',
+                        dark: '#0F172A',
+                        light: '#F8FAFC',
+                        'dark-blue': '#0B1120',
+                        'deep-space': '#050A14',
+                        'nebula-purple': '#1E1B4B',
+                        'nebula-blue': '#0F172A',
+                        'nebula-pink': '#4C1D95'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'twinkle': 'twinkle 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'spin-medium': 'spin 15s linear infinite',
+                        'spin-fast': 'spin 10s linear infinite',
+                    },
+                    keyframes: {
+                        twinkle: {
+                            '0%, 100%': { opacity: 0.2 },
+                            '50%': { opacity: 1 },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
             }
         }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-        }
-
-        .card-gradient {
-            background: linear-gradient(145deg, #1e1e1e 0%, #171717 100%);
-        }
-
-        .card-gradient-purple {
-            background: linear-gradient(145deg, #4c1d95 0%, #3b0764 100%);
-        }
-
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .glow-effect:hover {
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
-        }
-
-        .search-glow:focus {
-            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.45);
-        }
-
-        .smooth-transition {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4c1d95;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #5b21b6;
-        }
-
-        /* Back to top button */
-        #back-to-top {
-            display: none;
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(145deg, #6d28d9 0%, #4c1d95 100%);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 99;
-            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.3);
-            transition: all 0.3s ease;
-            border: none;
-            outline: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #back-to-top:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(109, 40, 217, 0.4);
-        }
-
-        #back-to-top:active {
-            transform: translateY(1px);
-        }
-
-        /* Neon text effect */
-        .neon-text {
-            text-shadow: 0 0 5px rgba(167, 139, 250, 0.5),
-                         0 0 10px rgba(167, 139, 250, 0.3);
-        }
-
-        /* Grid item animation */
-        .grid-item {
-            transform: perspective(500px) translateZ(0);
-            backface-visibility: hidden;
-        }
-
-        .grid-item:hover {
-            transform: perspective(500px) translateZ(20px);
-        }
-
-        /* Section divider */
-        .divider {
-            position: relative;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(109, 40, 217, 0.5) 50%, transparent 100%);
-            margin: 2rem 0;
-        }
-
-        /* Input placeholder styling */
-        ::placeholder {
-            color: #9ca3af;
-            opacity: 1;
-        }
-
-        /* Ripple effect for buttons */
-        .ripple {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ripple:after {
-            content: "";
-            display: block;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-            background-repeat: no-repeat;
-            background-position: 50%;
-            transform: scale(10, 10);
-            opacity: 0;
-            transition: transform .5s, opacity 1s;
-        }
-
-        .ripple:active:after {
-            transform: scale(0, 0);
-            opacity: 0.3;
-            transition: 0s;
-        }
-
-        /* Tag styles */
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-right: 0.25rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .tag-calculator {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-        }
-
-        .tag-health {
-            background-color: rgba(244, 63, 94, 0.1);
-            color: #f43f5e;
-        }
-
-        .tag-productivity {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-        }
-
-        .tag-finance {
-            background-color: rgba(234, 179, 8, 0.1);
-            color: #eab308;
-        }
-
-        .tag-media {
-            background-color: rgba(168, 85, 247, 0.1);
-            color: #a855f7;
-        }
-
-        .tag-utility {
-            background-color: rgba(6, 182, 212, 0.1);
-            color: #06b6d4;
-        }
-
-        .tag-developer {
-            background-color: rgba(244, 63, 94, 0.1);
-            color: #f43f5e;
-        }
-
-        .tag-time {
-            background-color: rgba(139, 92, 246, 0.1);
-            color: #8b5cf6;
-        }
-
-        .tag-text {
-            background-color: rgba(20, 184, 166, 0.1);
-            color: #14b8a6;
-        }
-
-        /* Active filter button */
-        .filter-btn.active {
-            background-color: #6d28d9;
-            color: white;
-        }
-
-        /* Tool card content */
-        .tool-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            width: 100%;
-        }
-
-        .tool-tags {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-
-   
-        /* 彩色渐变DeepSeek按钮 */
-        .deepseek-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, 
-                #FF512F 0%, 
-                #DD2476 25%, 
-                #8A2BE2 50%, 
-                #4B6CB7 75%, 
-                #1FA2FF 100%);
-            background-size: 300% 300%;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 9999px;
-            font-weight: 600;
-            text-decoration: none;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.5s ease;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: gradientBG 8s ease infinite, pulse 2s ease infinite;
-        }
-
-        .deepseek-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            animation: gradientBG 4s ease infinite, pulse 1s ease infinite;
-        }
-
-        .deepseek-btn i {
-            font-size: 1.2rem;
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
             }
-            50% {
-                background-position: 100% 50%;
+            .text-gradient {
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
-            100% {
-                background-position: 0% 50%;
+            .bg-glass {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
             }
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: translateY(0) scale(1);
+            .orbit {
+                position: absolute;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                animation: spin 20s linear infinite;
             }
-            50% {
-                transform: translateY(-3px) scale(1.05);
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
             }
-            100% {
-                transform: translateY(0) scale(1);
+            .orbit-slow {
+                animation-duration: 40s;
             }
-        }
-
-        /* B站横幅样式 */
-        .bilibili-banner {
-            background: linear-gradient(145deg, #1e1e1e 0%, #171717 100%);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 12px 20px;
-            margin: 0 auto 24px auto;
-            max-width: 1000px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .bilibili-text {
-            font-size: 1.1rem;
-            color: #e5e7eb;
-            display: flex;
-            align-items: center;
-        }
-
-        .bilibili-btn {
-            background: linear-gradient(145deg, #FFD700 0%, #FFA500 100%);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .bilibili-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-        }
-
-        .bilibili-btn:active {
-            transform: translateY(0);
-        }
-
-        .bilibili-icon {
-            color: #000;
-            font-size: 1.1rem;
-        }
-
-     
-        .beian-container {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .beian-link {
-            color: #9ca3af;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: color 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .beian-link:hover {
-            color: #d1d5db;
-        }
-
-        .beian-link i {
-            font-size: 0.8rem;
+            .orbit-medium {
+                animation-duration: 25s;
+            }
+            .orbit-fast {
+                animation-duration: 15s;
+            }
+            .slider-thumb::-webkit-slider-thumb {
+                @apply appearance-none w-5 h-5 rounded-full bg-primary cursor-pointer;
+            }
+            .slider-thumb::-moz-range-thumb {
+                @apply appearance-none w-5 h-5 rounded-full bg-primary border-0 cursor-pointer;
+            }
+            .toggle-checkbox:checked {
+                @apply right-0 border-primary;
+            }
+            .toggle-checkbox:checked + .toggle-label {
+                @apply bg-primary;
+            }
         }
     </style>
 </head>
-<body class="gradient-bg">
-<!-- 星空背景 -->
-<div class="stars-container" id="stars-container"></div>
-<!-- 彩色渐变DeepSeek按钮 -->
-<a class="deepseek-btn ripple" href="http://kr-se-cncn-1.ofalias.net:59459/" rel="nofollow noopener noreferrer" target="_blank">
-<i class="fa-solid fa-rocket"></i>
-        去花少音频资源网!
-    </a>
-
-<div class="min-h-screen w-full py-12 px-4 sm:px-6 lg:px-8">
-<div class="max-w-7xl mx-auto">
-<!-- Header Section -->
-<header class="text-center mb-8">
-<h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600 neon-text">
-                    DailyFunctions
-                </h1>
-<body>
-<h1>花少音频资源网</h1>
-
-<h1>Kx3538驱动<br></h1>
-<h1>Kx3552驱动<br></h1>
-<h1>Kx3553驱动<br></h1>
-<h1>Kx7.1效果<br></h1>
-<h1>Kx5.1效果<br></h1>
-<h1>VST插件<br></h1>
-<h1>直播音效<br></h1>
-<h1>电音助手<br></h1>
-<h1>占用电脑很小直播机架</div></h1>
-<body>
-<br/>
-<a class="beian-link" href="https://beian.mps.gov.cn/#/query/webSearch?code=32031102020208" rel="noreferrer" target="_blank">
-
-</div>
-</div>
-</div>
-
-<script>
-        // 创建星空背景
-        function createStars() {
-            const container = document.getElementById('stars-container');
-            const starsCount = 200;
-            const shootingStarsCount = 3;
+<body class="bg-dark-blue text-light overflow-hidden h-screen">
+    <!-- Star Background Canvas -->
+    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+    
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-glass bg-opacity-20 border-b border-white border-opacity-10">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary to-secondary">花少音频资源 </h1>
             
-            // 创建静态星星
-            for (let i = 0; i < starsCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // 随机大小 (1-3px)
-                const size = Math.random() * 2 + 1;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                // 随机位置
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // 随机闪烁时间 (3-8秒)
-                const duration = Math.random() * 5 + 3;
-                star.style.setProperty('--duration', `${duration}s`);
-                
-                // 随机透明度 (0.3-0.9)
-                star.style.opacity = Math.random() * 0.6 + 0.3;
-                
-                container.appendChild(star);
-            }
+            <!-- Toggle Button for Control Panel -->
+            <button id="controlPanelToggle" class="px-4 py-2 bg-glass bg-opacity-30 rounded-lg flex items-center">
+                <i class="fa fa-sliders mr-2"></i> 控制面板
+            </button>
+        </div>
+    </header>
+  
+    <!-- Main Content -->
+    <main class="h-screen flex items-center justify-center relative z-10">
+        <div class="text-center px-4">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6 text-shadow" id="mainTitle">
+                <span class="text-gradient bg-gradient-to-r from-primary via-secondary to-accent">花少音频资源 </span>
+            </h2>
+
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto" id="mainDescription">
+              创新声卡Kx驱动；直播机架；VST插件；音效助手；电音助手；
+            </p>
+             
+            <!-- Preset Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button class="preset-btn px-6 py-3 bg-glass bg-opacity-30 rounded-lg border border-white border-opacity-20 hover:border-primary hover:text-primary transition-all" data-preset="default">
+                    默认星空
+                </button>
+                <button class="preset-btn px-6 py-3 bg-glass bg-opacity-30 rounded-lg border border-white border-opacity-20 hover:border-primary hover:text-primary transition-all" data-preset="nebula">
+                    星云模式
+                </button>
+                <button class="preset-btn px-6 py-3 bg-glass bg-opacity-30 rounded-lg border border-white border-opacity-20 hover:border-primary hover:text-primary transition-all" data-preset="galaxy">
+                    银河模式
+                </button>
+                <button class="preset-btn px-6 py-3 bg-glass bg-opacity-30 rounded-lg border border-white border-opacity-20 hover:border-primary hover:text-primary transition-all" data-preset="minimal">
+                    极简模式
+    
+                </button>
+     
+                </button>
+  
+            </div>
+<a href="http://kr-se-cncn-1.ofalias.net:59459/" title= <h1> 点我哦！资源下载</a></h1>
+
+
+        </div>
+    </main>
+
+    <!-- Control Panel -->
+    <div id="controlPanel" class="fixed top-16 right-0 w-80 bg-glass bg-opacity-95 border-l border-white border-opacity-10 z-40 transform translate-x-full transition-transform duration-300 ease-in-out h-[calc(100vh-4rem)] overflow-y-auto">
+        <div class="p-6">
+            <h3 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fa fa-sliders mr-2 text-primary"></i> 背景设置
+            </h3>
             
-            // 创建流星
-            for (let i = 0; i < shootingStarsCount; i++) {
-                const shootingStar = document.createElement('div');
-                shootingStar.classList.add('shooting-star');
-                
-                // 随机位置
-                shootingStar.style.top = `${Math.random() * 30}%`;
-                shootingStar.style.left = `${Math.random() * 100}%`;
-                
-                // 随机动画时间 (3-8秒)
-                const duration = Math.random() * 5 + 3;
-                shootingStar.style.setProperty('--duration', `${duration}s`);
-                
-                // 随机距离 (100-300px)
-                const distance = Math.random() * 200 + 100;
-                shootingStar.style.setProperty('--distance', `${distance}px`);
-                
-                // 随机延迟 (0-15秒)
-                shootingStar.style.animationDelay = `${Math.random() * 15}s`;
-                
-                container.appendChild(shootingStar);
-            }
-        }
-
-        // 页面加载完成后创建星空
-        window.addEventListener('load', createStars);
-
-        const searchBox = document.getElementById('search-box');
-        const links = document.querySelectorAll('main a');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-
-        // 初始激活"全部工具"按钮
-        document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
-
-        function filterLinks() {
-            const searchTerm = searchBox.value.trim().toLowerCase();
-            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-
-            links.forEach(link => {
-                const linkText = link.textContent.toLowerCase();
-                const linkTags = link.dataset.tags || '';
-                
-                // 同时满足搜索条件和分类过滤
-                const matchesSearch = searchTerm === '' || linkText.includes(searchTerm);
-                const matchesFilter = activeFilter === 'all' || linkTags.includes(activeFilter);
-                
-                const shouldShow = matchesSearch && matchesFilter;
-                
-                if (shouldShow) {
-                    link.style.display = "flex";
-                    setTimeout(() => {
-                        link.style.opacity = "1";
-                        link.style.transform = "translateY(0)";
-                    }, 50);
-                } else {
-                    link.style.opacity = "0";
-                    link.style.transform = "translateY(20px)";
-                    setTimeout(() => {
-                        link.style.display = "none";
-                    }, 300);
-                }
-            });
-        }
-
-        // 搜索框事件
-        searchBox.addEventListener('input', filterLinks);
-
-        // 分类按钮事件
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                filterLinks();
-            });
+            <!-- Background Color -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-3">背景颜色</label>
+                <div class="grid grid-cols-5 gap-2">
+                    <button class="bg-dark-blue w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-bg="bg-dark-blue"></button>
+                    <button class="bg-deep-space w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-bg="bg-deep-space"></button>
+                    <button class="bg-nebula-blue w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-bg="bg-nebula-blue"></button>
+                    <button class="bg-nebula-purple w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-bg="bg-nebula-purple"></button>
+                    <button class="bg-nebula-pink w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-bg="bg-nebula-pink"></button>
+                </div>
+            </div>
+            
+            <!-- Star Count -->
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <label class="block text-sm font-medium">星星数量</label>
+                    <span id="starCountValue" class="text-sm text-gray-400">中等</span>
+                </div>
+                <input type="range" id="starCount" min="100" max="2000" step="100" value="800" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            
+            <!-- Star Size -->
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <label class="block text-sm font-medium">星星大小</label>
+                    <span id="starSizeValue" class="text-sm text-gray-400">中等</span>
+                </div>
+                <input type="range" id="starSize" min="1" max="5" step="0.5" value="2" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            
+            <!-- Star Speed -->
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <label class="block text-sm font-medium">星星移动速度</label>
+                    <span id="starSpeedValue" class="text-sm text-gray-400">中等</span>
+                </div>
+                <input type="range" id="starSpeed" min="0.1" max="0.5" step="0.1" value="0.2" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            
+            <!-- Star Twinkle -->
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <label class="block text-sm font-medium">星星闪烁强度</label>
+                    <span id="twinkleIntensityValue" class="text-sm text-gray-400">中等</span>
+                </div>
+                <input type="range" id="twinkleIntensity" min="0" max="1" step="0.1" value="0.5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            
+            <!-- Mouse Interaction -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-3">鼠标互动效果</label>
+                <div class="flex items-center">
+                    <div class="relative inline-block w-12 align-middle select-none">
+                        <input type="checkbox" id="mouseInteraction" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer right-0 top-0" />
+                        <label for="mouseInteraction" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                    <span class="ml-3 text-sm">启用鼠标互动</span>
+                </div>
+            </div>
+            
+            <!-- Mouse Radius -->
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <label class="block text-sm font-medium">鼠标影响范围</label>
+                    <span id="mouseRadiusValue" class="text-sm text-gray-400">150px</span>
+                </div>
+                <input type="range" id="mouseRadius" min="50" max="300" step="10" value="150" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+            
+            <!-- Glow Color -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-3">发光颜色</label>
+                <div class="grid grid-cols-5 gap-2">
+                    <button class="bg-blue-500 w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-glow="rgba(59, 130, 246, {opacity})"></button>
+                    <button class="bg-purple-500 w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-glow="rgba(139, 92, 246, {opacity})"></button>
+                    <button class="bg-pink-500 w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-glow="rgba(244, 114, 182, {opacity})"></button>
+                    <button class="bg-cyan-500 w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-glow="rgba(34, 211, 238, {opacity})"></button>
+                    <button class="bg-white w-full h-8 rounded-full border-2 border-transparent hover:border-white transition-all" data-glow="rgba(255, 255, 255, {opacity})"></button>
+                </div>
+            </div>
+            
+            <!-- Orbit Animation -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-3">轨道动画</label>
+                <div class="flex items-center">
+                    <div class="relative inline-block w-12 align-middle select-none">
+                        <input type="checkbox" id="orbitAnimation" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer right-0 top-0" />
+                        <label for="orbitAnimation" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                    <span class="ml-3 text-sm">启用轨道动画</span>
+                </div>
+            </div>
+            
+            <!-- Reset Button -->
+            <div class="mt-8">
+                <button id="resetSettings" class="w-full px-6 py-3 bg-white bg-opacity-10 rounded-lg font-medium hover:bg-opacity-20 transition-all">
+                    <i class="fa fa-refresh mr-2"></i> 重置设置
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="fixed bottom-0 left-0 w-full z-50 bg-glass bg-opacity-20 border-t border-white border-opacity-10 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-400">
+            <p>星光闪闪动态背景 &copy; 2025 | 沉浸式星空体验</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Star Background
+            initStarBackground();
+            
+            // Initialize Control Panel
+            initControlPanel();
+            
+            // Initialize Preset Buttons
+            initPresetButtons();
+            
+            // Initialize Action Buttons
+            initActionButtons();
+            
+            // Initialize Settings Controls
+            initSettingsControls();
         });
-
-        // Initialize with all links visible
-        filterLinks();
-
-        // Back to top button functionality
-        const backToTopButton = document.getElementById('back-to-top');
         
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopButton.style.display = "flex";
-            } else {
-                backToTopButton.style.display = "none";
+        // Star Background Animation
+        function initStarBackground() {
+            const canvas = document.getElementById('starCanvas');
+            const ctx = canvas.getContext('2d');
+            const body = document.body;
+            
+            // Settings object to hold all configurable parameters
+            window.starSettings = {
+                starCount: 800,
+                starSize: 2,
+                starSpeed: 0.2,
+                twinkleIntensity: 0.5,
+                mouseInteraction: true,
+                mouseRadius: 150,
+                glowColor: 'rgba(59, 130, 246, {opacity})',
+                orbitAnimation: true,
+                backgroundColor: 'bg-dark-blue'
+            };
+            
+            // Set canvas size
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-        });
-
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Star class
+            class Star {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * window.starSettings.starSize + 1;
+                    this.speedX = (Math.random() - 0.5) * window.starSettings.starSpeed;
+                    this.speedY = (Math.random() - 0.5) * window.starSettings.starSpeed;
+                    this.opacity = Math.random() * 0.8 + 0.2;
+                    this.opacitySpeed = Math.random() * 0.01 * window.starSettings.twinkleIntensity + 0.005;
+                    this.opacityDirection = Math.random() > 0.5 ? 1 : -1;
+                    this.isFixed = Math.random() > 0.7; // 30% of stars are fixed
+                }
+                
+                update() {
+                    if (!this.isFixed) {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                    }
+                    
+                    // Update opacity based on twinkle intensity
+                    if (window.starSettings.twinkleIntensity > 0) {
+                        this.opacity += this.opacitySpeed * this.opacityDirection * window.starSettings.twinkleIntensity;
+                        if (this.opacity > 1) {
+                            this.opacity = 1;
+                            this.opacityDirection = -1;
+                        } else if (this.opacity < 0.2) {
+                            this.opacity = 0.2;
+                            this.opacityDirection = 1;
+                        }
+                    }
+                    
+                    // Reset if out of bounds
+                    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                        this.reset();
+                    }
+                }
+                
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fill();
+                }
+                
+                drawGlow(glowFactor) {
+                    const glowColor = window.starSettings.glowColor.replace('{opacity}', glowFactor * 0.5);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.size * 5 * glowFactor
+                    );
+                    gradient.addColorStop(0, glowColor);
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 5 * glowFactor, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
+            }
+            
+            // Create stars
+            let stars = [];
+            
+            function createStars() {
+                stars = [];
+                for (let i = 0; i < window.starSettings.starCount; i++) {
+                    stars.push(new Star());
+                }
+            }
+            
+            // Create initial stars
+            createStars();
+            
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
             });
-        });
-
-        // Add ripple effect to all buttons
-        const rippleButtons = document.querySelectorAll('.ripple');
-        rippleButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = e.target.closest('a');
-                if (target) {
-                    setTimeout(() => {
-                        window.location.href = target.href;
-                    }, 300);
+            
+            // Orbit elements
+            const orbits = [];
+            
+            function createOrbits() {
+                // Clear existing orbits
+                const existingOrbits = document.querySelectorAll('.orbit');
+                existingOrbits.forEach(orbit => orbit.remove());
+                
+                if (!window.starSettings.orbitAnimation) return;
+                
+                // Create new orbits
+                const orbitSizes = [200, 350, 500];
+                const orbitSpeeds = ['orbit-slow', 'orbit-medium', 'orbit-fast'];
+                const orbitPositions = [
+                    { top: '10%', left: '10%' },
+                    { top: '60%', left: '70%' },
+                    { top: '40%', left: '80%' }
+                ];
+                
+                orbitSizes.forEach((size, index) => {
+                    const orbit = document.createElement('div');
+                    orbit.className = `orbit ${orbitSpeeds[index % orbitSpeeds.length]}`;
+                    orbit.style.width = `${size}px`;
+                    orbit.style.height = `${size}px`;
+                    orbit.style.top = orbitPositions[index % orbitPositions.length].top;
+                    orbit.style.left = orbitPositions[index % orbitPositions.length].left;
+                    orbit.style.transform = 'translate(-50%, -50%)';
+                    document.body.appendChild(orbit);
+                    orbits.push(orbit);
+                });
+            }
+            
+            // Create initial orbits
+            createOrbits();
+            
+            // Ripple effect
+            const ripples = [];
+            
+            function drawRipples() {
+                for (let i = ripples.length - 1; i >= 0; i--) {
+                    const ripple = ripples[i];
+                    
+                    ripple.radius += 2;
+                    ripple.opacity -= 0.01;
+                    
+                    if (ripple.opacity <= 0) {
+                        ripples.splice(i, 1);
+                        continue;
+                    }
+                    
+                    const glowColor = window.starSettings.glowColor.replace('{opacity}', ripple.opacity);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        ripple.x, ripple.y, 0,
+                        ripple.x, ripple.y, ripple.radius
+                    );
+                    gradient.addColorStop(0, glowColor);
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    
+                    ctx.beginPath();
+                    ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
+            }
+            
+            // Animation loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw stars
+                stars.forEach(star => {
+                    star.update();
+                    
+                    // Check distance from mouse
+                    if (window.starSettings.mouseInteraction) {
+                        const dx = star.x - mouseX;
+                        const dy = star.y - mouseY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        // If star is near mouse, draw a glow effect
+                        if (distance < window.starSettings.mouseRadius) {
+                            const glowFactor = 1 - (distance / window.starSettings.mouseRadius);
+                            
+                            // Draw glow
+                            star.drawGlow(glowFactor);
+                            
+                            // Draw ripple effect occasionally
+                            if (Math.random() > 0.98) {
+                                const ripple = {
+                                    x: star.x,
+                                    y: star.y,
+                                    radius: 0,
+                                    maxRadius: star.size * 10 * glowFactor,
+                                    opacity: 0.5
+                                };
+                                
+                                ripples.push(ripple);
+                            }
+                        }
+                    }
+                    
+                    star.draw();
+                });
+                
+                // Draw ripples
+                drawRipples();
+                
+                requestAnimationFrame(animate);
+            }
+            
+            // Start animation
+            animate();
+            
+            // Update stars when settings change
+            window.updateStars = function() {
+                // Update star count
+                if (stars.length !== window.starSettings.starCount) {
+                    createStars();
+                }
+                
+                // Update individual star properties
+                stars.forEach(star => {
+                    star.size = Math.random() * window.starSettings.starSize + 1;
+                    star.speedX = (Math.random() - 0.5) * window.starSettings.starSpeed;
+                    star.speedY = (Math.random() - 0.5) * window.starSettings.starSpeed;
+                    star.opacitySpeed = Math.random() * 0.01 * window.starSettings.twinkleIntensity + 0.005;
+                });
+                
+                // Update orbits
+                createOrbits();
+                
+                // Update background color
+                body.className = body.className.replace(/bg-\w+(-\w+)*/g, '');
+                body.classList.add(window.starSettings.backgroundColor);
+            };
+        }
+        
+        // Control Panel Toggle
+        function initControlPanel() {
+            const controlPanelToggle = document.getElementById('controlPanelToggle');
+            const controlPanel = document.getElementById('controlPanel');
+            const body = document.body;
+            
+            controlPanelToggle.addEventListener('click', () => {
+                controlPanel.classList.toggle('translate-x-full');
+                
+                // Change icon
+                const icon = controlPanelToggle.querySelector('i');
+                if (controlPanel.classList.contains('translate-x-full')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-sliders');
+                    controlPanelToggle.innerHTML = '<i class="fa fa-sliders mr-2"></i> 控制面板';
+                } else {
+                    icon.classList.remove('fa-sliders');
+                    icon.classList.add('fa-times');
+                    controlPanelToggle.innerHTML = '<i class="fa fa-times mr-2"></i> 关闭面板';
                 }
             });
-        });
+        }
+        
+        // Preset Buttons
+        function initPresetButtons() {
+            const presetButtons = document.querySelectorAll('.preset-btn');
+            
+            const presets = {
+                'default': {
+                    starCount: 800,
+                    starSize: 2,
+                    starSpeed: 0.2,
+                    twinkleIntensity: 0.5,
+                    mouseInteraction: true,
+                    mouseRadius: 150,
+                    glowColor: 'rgba(59, 130, 246, {opacity})',
+                    orbitAnimation: true,
+                    backgroundColor: 'bg-dark-blue'
+                },
+                'nebula': {
+                    starCount: 1200,
+                    starSize: 1.5,
+                    starSpeed: 0.1,
+                    twinkleIntensity: 0.8,
+                    mouseInteraction: true,
+                    mouseRadius: 200,
+                    glowColor: 'rgba(139, 92, 246, {opacity})',
+                    orbitAnimation: true,
+                    backgroundColor: 'bg-nebula-purple'
+                },
+                'galaxy': {
+                    starCount: 1500,
+                    starSize: 1,
+                    starSpeed: 0.3,
+                    twinkleIntensity: 0.3,
+                    mouseInteraction: true,
+                    mouseRadius: 250,
+                    glowColor: 'rgba(34, 211, 238, {opacity})',
+                    orbitAnimation: true,
+                    backgroundColor: 'bg-deep-space'
+                },
+                'minimal': {
+                    starCount: 300,
+                    starSize: 2.5,
+                    starSpeed: 0.1,
+                    twinkleIntensity: 0.2,
+                    mouseInteraction: false,
+                    mouseRadius: 100,
+                    glowColor: 'rgba(255, 255, 255, {opacity})',
+                    orbitAnimation: false,
+                    backgroundColor: 'bg-dark'
+                }
+            };
+            
+            presetButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const presetName = button.getAttribute('data-preset');
+                    const preset = presets[presetName];
+                    
+                    // Apply preset settings
+                    Object.assign(window.starSettings, preset);
+                    
+                    // Update UI controls to reflect preset
+                    updateUIFromSettings();
+                    
+                    // Update stars with new settings
+                    window.updateStars();
+                    
+                    // Update active preset button
+                    presetButtons.forEach(btn => btn.classList.remove('border-primary', 'text-primary'));
+                    button.classList.add('border-primary', 'text-primary');
+                });
+            });
+        }
+        
+        // Action Buttons
+        function initActionButtons() {
+            // Download Button
+            const downloadBtn = document.getElementById('downloadBtn');
+            const canvas = document.getElementById('starCanvas');
+            
+            downloadBtn.addEventListener('click', () => {
+                // Create a temporary canvas for the download
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                // Set canvas size to screen resolution
+                tempCanvas.width = window.innerWidth;
+                tempCanvas.height = window.innerHeight;
+                
+                // Draw background color
+                const bgColor = window.getComputedStyle(document.body).backgroundColor;
+                tempCtx.fillStyle = bgColor;
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                // Draw stars
+                tempCtx.drawImage(canvas, 0, 0);
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.download = 'starlight-background.png';
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
+            });
+            
+            // Fullscreen Button
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                    });
+                    fullscreenBtn.innerHTML = '<i class="fa fa-compress mr-2"></i> 退出全屏';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                        fullscreenBtn.innerHTML = '<i class="fa fa-expand mr-2"></i> 全屏体验';
+                    }
+                }
+            });
+            
+            // Listen for fullscreen change
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = '<i class="fa fa-expand mr-2"></i> 全屏体验';
+                } else {
+                    fullscreenBtn.innerHTML = '<i class="fa fa-compress mr-2"></i> 退出全屏';
+                }
+            });
+            
+            // Reset Button
+            const resetSettings = document.getElementById('resetSettings');
+            
+            resetSettings.addEventListener('click', () => {
+                // Reset to default settings
+                Object.assign(window.starSettings, {
+                    starCount: 800,
+                    starSize: 2,
+                    starSpeed: 0.2,
+                    twinkleIntensity: 0.5,
+                    mouseInteraction: true,
+                    mouseRadius: 150,
+                    glowColor: 'rgba(59, 130, 246, {opacity})',
+                    orbitAnimation: true,
+                    backgroundColor: 'bg-dark-blue'
+                });
+                
+                // Update UI controls
+                updateUIFromSettings();
+                
+                // Update stars
+                window.updateStars();
+                
+                // Reset preset buttons
+                const presetButtons = document.querySelectorAll('.preset-btn');
+                presetButtons.forEach(btn => btn.classList.remove('border-primary', 'text-primary'));
+                document.querySelector('[data-preset="default"]').classList.add('border-primary', 'text-primary');
+            });
+        }
+        
+        // Settings Controls
+        function initSettingsControls() {
+            // Star Count
+            const starCount = document.getElementById('starCount');
+            const starCountValue = document.getElementById('starCountValue');
+            
+            starCount.addEventListener('input', () => {
+                window.starSettings.starCount = parseInt(starCount.value);
+                
+                // Update display value
+                const countLabels = ['极少', '很少', '少', '较少', '中等', '较多', '多', '很多', '极多', '最多'];
+                const index = Math.min(Math.floor(window.starSettings.starCount / 200), countLabels.length - 1);
+                starCountValue.textContent = countLabels[index];
+                
+                // Update stars
+                window.updateStars();
+            });
+            
+            // Star Size
+            const starSize = document.getElementById('starSize');
+            const starSizeValue = document.getElementById('starSizeValue');
+            
+            starSize.addEventListener('input', () => {
+                window.starSettings.starSize = parseFloat(starSize.value);
+                
+                // Update display value
+                const sizeLabels = ['极小', '很小', '小', '较小', '中等', '较大', '大', '很大', '极大'];
+                const index = Math.min(Math.floor((window.starSettings.starSize - 1) * 2), sizeLabels.length - 1);
+                starSizeValue.textContent = sizeLabels[index];
+                
+                // Update stars
+                window.updateStars();
+            });
+            
+            // Star Speed
+            const starSpeed = document.getElementById('starSpeed');
+            const starSpeedValue = document.getElementById('starSpeedValue');
+            
+            starSpeed.addEventListener('input', () => {
+                window.starSettings.starSpeed = parseFloat(starSpeed.value);
+                
+                // Update display value
+                const speedLabels = ['极慢', '很慢', '慢', '较慢', '中等', '较快'];
+                const index = Math.min(Math.floor((window.starSettings.starSpeed - 0.1) * 10), speedLabels.length - 1);
+                starSpeedValue.textContent = speedLabels[index];
+                
+                // Update stars
+                window.updateStars();
+            });
+            
+            // Twinkle Intensity
+            const twinkleIntensity = document.getElementById('twinkleIntensity');
+            const twinkleIntensityValue = document.getElementById('twinkleIntensityValue');
+            
+            twinkleIntensity.addEventListener('input', () => {
+                window.starSettings.twinkleIntensity = parseFloat(twinkleIntensity.value);
+                
+                // Update display value
+                const intensityLabels = ['无', '极弱', '很弱', '弱', '较弱', '中等', '较强', '强', '很强', '极强', '最强'];
+                const index = Math.min(Math.floor(window.starSettings.twinkleIntensity * 10), intensityLabels.length - 1);
+                twinkleIntensityValue.textContent = intensityLabels[index];
+                
+                // Update stars
+                window.updateStars();
+            });
+            
+            // Mouse Interaction
+            const mouseInteraction = document.getElementById('mouseInteraction');
+            
+            mouseInteraction.addEventListener('change', () => {
+                window.starSettings.mouseInteraction = mouseInteraction.checked;
+            });
+            
+            // Mouse Radius
+            const mouseRadius = document.getElementById('mouseRadius');
+            const mouseRadiusValue = document.getElementById('mouseRadiusValue');
+            
+            mouseRadius.addEventListener('input', () => {
+                window.starSettings.mouseRadius = parseInt(mouseRadius.value);
+                mouseRadiusValue.textContent = `${window.starSettings.mouseRadius}px`;
+            });
+            
+            // Glow Color
+            const glowColorButtons = document.querySelectorAll('[data-glow]');
+            
+            glowColorButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    window.starSettings.glowColor = button.getAttribute('data-glow');
+                    
+                    // Update active button
+                    glowColorButtons.forEach(btn => btn.classList.remove('border-2', 'border-white'));
+                    button.classList.add('border-2', 'border-white');
+                });
+            });
+            
+            // Orbit Animation
+            const orbitAnimation = document.getElementById('orbitAnimation');
+            
+            orbitAnimation.addEventListener('change', () => {
+                window.starSettings.orbitAnimation = orbitAnimation.checked;
+                
+                // Update orbits
+                const orbits = document.querySelectorAll('.orbit');
+                orbits.forEach(orbit => {
+                    orbit.style.display = window.starSettings.orbitAnimation ? 'block' : 'none';
+                });
+            });
+            
+            // Background Color
+            const bgColorButtons = document.querySelectorAll('[data-bg]');
+            
+            bgColorButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    window.starSettings.backgroundColor = button.getAttribute('data-bg');
+                    
+                    // Update active button
+                    bgColorButtons.forEach(btn => btn.classList.remove('border-2', 'border-white'));
+                    button.classList.add('border-2', 'border-white');
+                    
+                    // Update background
+                    window.updateStars();
+                });
+            });
+            
+            // Update UI from settings object
+            function updateUIFromSettings() {
+                // Star Count
+                starCount.value = window.starSettings.starCount;
+                const countLabels = ['极少', '很少', '少', '较少', '中等', '较多', '多', '很多', '极多', '最多'];
+                const countIndex = Math.min(Math.floor(window.starSettings.starCount / 200), countLabels.length - 1);
+                starCountValue.textContent = countLabels[countIndex];
+                
+                // Star Size
+                starSize.value = window.starSettings.starSize;
+                const sizeLabels = ['极小', '很小', '小', '较小', '中等', '较大', '大', '很大', '极大'];
+                const sizeIndex = Math.min(Math.floor((window.starSettings.starSize - 1) * 2), sizeLabels.length - 1);
+                starSizeValue.textContent = sizeLabels[sizeIndex];
+                
+                // Star Speed
+                starSpeed.value = window.starSettings.starSpeed;
+                const speedLabels = ['极慢', '很慢', '慢', '较慢', '中等', '较快'];
+                const speedIndex = Math.min(Math.floor((window.starSettings.starSpeed - 0.1) * 10), speedLabels.length - 1);
+                starSpeedValue.textContent = speedLabels[speedIndex];
+                
+                // Twinkle Intensity
+                twinkleIntensity.value = window.starSettings.twinkleIntensity;
+                const intensityLabels = ['无', '极弱', '很弱', '弱', '较弱', '中等', '较强', '强', '很强', '极强', '最强'];
+                const intensityIndex = Math.min(Math.floor(window.starSettings.twinkleIntensity * 10), intensityLabels.length - 1);
+                twinkleIntensityValue.textContent = intensityLabels[intensityIndex];
+                
+                // Mouse Interaction
+                mouseInteraction.checked = window.starSettings.mouseInteraction;
+                
+                // Mouse Radius
+                mouseRadius.value = window.starSettings.mouseRadius;
+                mouseRadiusValue.textContent = `${window.starSettings.mouseRadius}px`;
+                
+                // Glow Color
+                glowColorButtons.forEach(btn => btn.classList.remove('border-2', 'border-white'));
+                const activeGlowBtn = Array.from(glowColorButtons).find(btn => 
+                    btn.getAttribute('data-glow') === window.starSettings.glowColor
+                );
+                if (activeGlowBtn) {
+                    activeGlowBtn.classList.add('border-2', 'border-white');
+                }
+                
+                // Orbit Animation
+                orbitAnimation.checked = window.starSettings.orbitAnimation;
+                
+                // Background Color
+                bgColorButtons.forEach(btn => btn.classList.remove('border-2', 'border-white'));
+                const activeBgBtn = Array.from(bgColorButtons).find(btn => 
+                    btn.getAttribute('data-bg') === window.starSettings.backgroundColor
+                );
+                if (activeBgBtn) {
+                    activeBgBtn.classList.add('border-2', 'border-white');
+                }
+            }
+            
+            // Initialize UI with default settings
+            updateUIFromSettings();
+        }
     </script>
-
-
-
 </body>
 </html>
